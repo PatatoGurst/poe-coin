@@ -1,0 +1,16 @@
+version: '2'
+services:
+  poecoin-mongodb:
+    image: mongo:4.0.16
+    ports:
+      - '27017:27017'
+    command: mongos --configdb poecoin-mongodb-config
+  poecoin-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  poecoin-mongodb-config:
+    image: mongo:4.0.16
+    container_name: poecoin-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
